@@ -1,43 +1,21 @@
 ALLOW_MISSING_DEPENDENCIES=true
 
 # Default A/B configuration.
-ENABLE_AB ?= false
+ENABLE_AB := false
 
 # Dynamic-partition disabled by default
-BOARD_DYNAMIC_PARTITION_ENABLE ?= false
+BOARD_DYNAMIC_PARTITION_ENABLE := false
 
 ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_PACKAGES += fastbootd
 # Add default implementation of fastboot HAL.
 PRODUCT_PACKAGES += android.hardware.fastboot@1.0-impl-mock
-ifeq ($(ENABLE_AB), true)
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstabs-4.9/fstab_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
-else
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstabs-4.9/fstab_non_AB_dynamic_partition_variant.qti:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
-endif
-endif
-
-# Enable AVB 2.0
-ifneq ($(wildcard kernel/msm-4.9),)
-BOARD_AVB_ENABLE := true
-
-ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
-# Enable product partition
-PRODUCT_BUILD_PRODUCT_IMAGE := true
-# enable vbmeta_system
-BOARD_AVB_VBMETA_SYSTEM := system product
-BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
-BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA2048
-BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
-BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 2
-$(call inherit-product, build/make/target/product/gsi_keys.mk)
-endif
-endif
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstab.qcom:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
 
 TARGET_USES_AOSP := false
 TARGET_USES_AOSP_FOR_AUDIO := false
-TARGET_USES_QCOM_BSP := false
+TARGET_USES_QCOM_BSP ?= false
 TARGET_SYSTEM_PROP := device/qcom/msm8937_64/system.prop
 
 ifeq ($(TARGET_USES_AOSP),true)
@@ -56,24 +34,7 @@ ifeq ($(ENABLE_VENDOR_IMAGE), true)
 #TARGET_USES_QTIC := false
 endif
 
-
-TARGET_USES_NQ_NFC := false
-
-ifeq ($(TARGET_USES_NQ_NFC),true)
-PRODUCT_COPY_FILES += \
-    device/qcom/common/nfc/libnfc-brcm.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libnfc-nci.conf
-endif
-
-
-ifneq ($(wildcard kernel/msm-3.18),)
-    TARGET_KERNEL_VERSION := 3.18
-    $(warning "Build with 3.18 kernel.")
-else ifneq ($(wildcard kernel/msm-4.9),)
-    TARGET_KERNEL_VERSION := 4.9
-    $(warning "Build with 4.9 kernel")
-else
-    $(warning "Unknown kernel")
-endif
+TARGET_KERNEL_VERSION := 4.9
 
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 
@@ -147,8 +108,6 @@ DEVICE_MATRIX_FILE   := device/qcom/common/compatibility_matrix.xml
 DEVICE_FRAMEWORK_MANIFEST_FILE := device/qcom/msm8937_64/framework_manifest.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
     vendor/qcom/opensource/core-utils/vendor_framework_compatibility_matrix.xml
-# default is nosdcard, S/W button enabled in resource
-PRODUCT_CHARACTERISTICS := nosdcard
 
 # When can normal compile this module, need module owner enable below commands
 # font rendering engine feature switch
@@ -170,35 +129,6 @@ PRODUCT_PACKAGES += libGLES_android
 -include $(TOPDIR)vendor/qcom/opensource/audio-hal/primary-hal/configs/msm8937/msm8937.mk
 
 USE_LIB_PROCESS_GROUP := true
-
-#Audio DLKM
-ifeq ($(TARGET_KERNEL_VERSION), 4.9)
-AUDIO_DLKM := audio_apr.ko
-AUDIO_DLKM += audio_q6_notifier.ko
-AUDIO_DLKM += audio_adsp_loader.ko
-AUDIO_DLKM += audio_q6.ko
-AUDIO_DLKM += audio_usf.ko
-AUDIO_DLKM += audio_pinctrl_wcd.ko
-AUDIO_DLKM += audio_swr.ko
-AUDIO_DLKM += audio_wcd_core.ko
-AUDIO_DLKM += audio_swr_ctrl.ko
-AUDIO_DLKM += audio_wsa881x.ko
-AUDIO_DLKM += audio_wsa881x_analog.ko
-AUDIO_DLKM += audio_platform.ko
-AUDIO_DLKM += audio_cpe_lsm.ko
-AUDIO_DLKM += audio_hdmi.ko
-AUDIO_DLKM += audio_stub.ko
-AUDIO_DLKM += audio_wcd9xxx.ko
-AUDIO_DLKM += audio_mbhc.ko
-AUDIO_DLKM += audio_wcd9335.ko
-AUDIO_DLKM += audio_wcd_cpe.ko
-AUDIO_DLKM += audio_digital_cdc.ko
-AUDIO_DLKM += audio_analog_cdc.ko
-AUDIO_DLKM += audio_native.ko
-AUDIO_DLKM += audio_machine_sdm450.ko
-AUDIO_DLKM += audio_machine_ext_sdm450.ko
-PRODUCT_PACKAGES += $(AUDIO_DLKM)
-endif
 
 # MIDI feature
 PRODUCT_COPY_FILES += \
@@ -228,10 +158,6 @@ PRODUCT_PACKAGES += wcnss_service
 # FBE support
 PRODUCT_COPY_FILES += \
     device/qcom/msm8937_64/init.qti.qseecomd.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.qti.qseecomd.sh
-
-# VB xml
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.software.verified_boot.xml:system/etc/permissions/android.software.verified_boot.xml
 
 # MSM IRQ Balancer configuration file
 PRODUCT_COPY_FILES += \
