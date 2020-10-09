@@ -108,6 +108,7 @@ TARGET_USES_COLOR_METADATA := true
 TARGET_NO_RPC := true
 
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 androidboot.bootdevice=7824900.sdhci earlycon=msm_hsl_uart,0x78B0000 ignore_loglevel androidboot.console=ttyHSL0
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 
 #BOARD_KERNEL_SEPARATED_DT := true
 
