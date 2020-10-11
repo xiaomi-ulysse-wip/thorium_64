@@ -6,11 +6,6 @@ ENABLE_AB := false
 # Dynamic-partition disabled by default
 BOARD_DYNAMIC_PARTITION_ENABLE := false
 
-ifeq ($(strip $(BOARD_DYNAMIC_PARTITION_ENABLE)),true)
-PRODUCT_USE_DYNAMIC_PARTITIONS := true
-PRODUCT_PACKAGES += fastbootd
-# Add default implementation of fastboot HAL.
-PRODUCT_PACKAGES += android.hardware.fastboot@1.0-impl-mock
 PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstab.qcom:$(TARGET_COPY_OUT_RAMDISK)/fstab.qcom
 
 TARGET_USES_AOSP := false
