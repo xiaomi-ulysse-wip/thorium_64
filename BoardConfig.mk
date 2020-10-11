@@ -188,7 +188,6 @@ TARGET_ENABLE_MEDIADRM_64 := true
 BOARD_BOOTIMG_HEADER_VERSION := 1
 
 BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
-endif
 
 #################################################################################
 # This is the End of BoardConfig.mk file.
