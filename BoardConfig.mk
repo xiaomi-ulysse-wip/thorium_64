@@ -10,7 +10,6 @@ BOARD_SYSTEMIMAGE_PARTITION_SIZE := 3221225472
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 BOARD_ROOT_EXTRA_SYMLINKS := \
     /vendor/dsp:/dsp \
-    /vendor/firmware_mnt:/firmware \
     /mnt/vendor/persist:/persist
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_COPY_OUT_VENDOR := vendor
