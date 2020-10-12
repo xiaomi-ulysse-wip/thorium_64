@@ -10,7 +10,7 @@ PRODUCT_COPY_FILES += $(LOCAL_PATH)/fstab.qcom:$(TARGET_COPY_OUT_RAMDISK)/fstab.
 
 TARGET_USES_AOSP := true
 TARGET_USES_AOSP_FOR_AUDIO := true
-TARGET_USES_QCOM_BSP := true
+TARGET_USES_QCOM_BSP := false
 TARGET_SYSTEM_PROP := device/qcom/msm8937_64/system.prop
 
 ifeq ($(TARGET_USES_AOSP),true)
