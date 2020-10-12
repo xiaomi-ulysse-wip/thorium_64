@@ -18,7 +18,7 @@ endif
 #----------------------------------------------------------------------
 # Compile Linux Kernel
 #----------------------------------------------------------------------
-KERNEL_DEFCONFIG := ulysse_defconfig
+KERNEL_DEFCONFIG := msm8937-perf_defconfig
 
 ifeq ($(TARGET_KERNEL_SOURCE),)
      TARGET_KERNEL_SOURCE := kernel
